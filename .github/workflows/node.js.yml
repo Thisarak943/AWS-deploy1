@@ -11,32 +11,14 @@ jobs:
       matrix:
         node-version: [20.x]
     steps:
-      # Checkout the repository
-      - uses: actions/checkout@v3
-
-      # Set up Node.js
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      # Navigate to the correct directory (if applicable)
-      - name: Navigate to project directory
-        working-directory: ./AWS-deploy1
-
-      # Install dependencies
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./AWS-deploy1
-
-      # Set up environment variables
-      - name: Create .env file
-        run: |
-          echo "MONGO_DB_URL=${{ secrets.MONGO_DB_URL }}" >> .env
-        working-directory: ./AWS-deploy1
-
-      # Restart the application with PM2
-      - name: Restart BackendAPI with PM2
-        run: pm2 restart BackendAPI
-        working-directory: ./AWS-deploy1
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci --prefix ./externals/node20/lib/node_modules/npm/node_modules/
+    - run: |
+        touch .env
+        echo "${{ secrets.PROD_ENV_FILE }}" > .env
+    - run: pm2 restart BackendAPI
