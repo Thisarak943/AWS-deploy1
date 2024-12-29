@@ -17,6 +17,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: Verify project directory structure
+      run: ls -al
     - run: npm ci --prefix ./  # Run npm ci from the project root directory
     - run: |
         touch .env
