@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci --prefix ./externals/node20/lib/node_modules/npm/node_modules/
+    - run: npm ci --prefix ./  # Run npm ci from the project root directory
     - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
